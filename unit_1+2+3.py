@@ -62,9 +62,15 @@ print("""
     |""")
 
 guess = input("Guess a letter: ")
-print(guess.lower())
+if len(guess) != 1 and not guess.isalpha():
+    print("E3")
+elif len(guess) != 1:
+    print("E1")
+elif not guess.isalpha():
+    print("E2")
+else:
+    print(guess.lower())
 
 word = input("Please enter a word: ")
 game = "_" * len(word)
-
 print(" ".join(game))
