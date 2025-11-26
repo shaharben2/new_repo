@@ -61,18 +61,23 @@ print("""
     |      / \
     |""")
 
-def is_valid_input(letter_guessed):
-    """this function checks if the input letter of the user is valid
-    :param letter_guessed: the input letter from the user
-    :type letter_guessed: string
-    :return: True if the input is valid or False if not
-    :rtype: bool"""
-    is_valid = True
-    if len(letter_guessed) != 1 or not letter_guessed.isalpha():
-        is_valid = False
-    
+
+def check_valid_input(letter_guessed, old_letters_guessed):
+    is_valid = False
+    if len(letter_guessed) == 1 and letter_guessed.isalpha() and letter_guessed.lower() not in old_letters_guessed:
+        is_valid = True
+
     return is_valid
+
 
 word = input("Please enter a word: ")
 game = "_" * len(word)
 print(" ".join(game))
+
+
+
+
+def main():
+     
+if __name__ == '__main__':
+    main()
