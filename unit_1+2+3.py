@@ -69,6 +69,16 @@ def check_valid_input(letter_guessed, old_letters_guessed):
 
     return is_valid
 
+def try_update_letter_guessed(letter_guessed, old_letters_guessed):
+    is_valid = check_valid_input(letter_guessed, old_letters_guessed)
+    if is_valid:
+        old_letters_guessed.append(letter_guessed)
+    else:
+        print("X")
+        print(sorted(old_letters_guessed))
+
+    print(is_valid)
+
 
 word = input("Please enter a word: ")
 game = "_" * len(word)
