@@ -61,15 +61,17 @@ print("""
     |      / \
     |""")
 
-guess = input("Guess a letter: ")
-if len(guess) != 1 and not guess.isalpha():
-    print("E3")
-elif len(guess) != 1:
-    print("E1")
-elif not guess.isalpha():
-    print("E2")
-else:
-    print(guess.lower())
+def is_valid_input(letter_guessed):
+    """this function checks if the input letter of the user is valid
+    :param letter_guessed: the input letter from the user
+    :type letter_guessed: string
+    :return: True if the input is valid or False if not
+    :rtype: bool"""
+    is_valid = True
+    if len(letter_guessed) != 1 or not letter_guessed.isalpha():
+        is_valid = False
+    
+    return is_valid
 
 word = input("Please enter a word: ")
 game = "_" * len(word)
