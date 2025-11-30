@@ -85,9 +85,29 @@ game = "_" * len(word)
 print(" ".join(game))
 
 
+def show_hidden_word(secret_word, old_letters_guessed):
+    gussed_by_now = ""
+    for num in range(len(secret_word)):
+        if secret_word[num] not in old_letters_guessed:
+            gussed_by_now += "_"
+        else:
+            gussed_by_now += secret_word[num]
+
+    return " ".join(gussed_by_now)
+
+
+def check_win(secret_word, old_letters_guessed):
+    has_won = True
+    for num in range(len(secret_word)):
+        if secret_word[num] not in old_letters_guessed:
+            has_won = False
+
+    return has_won
 
 
 def main():
-     
+
+
+
 if __name__ == '__main__':
     main()
