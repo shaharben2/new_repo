@@ -9,58 +9,48 @@ HANGMAN_ASCII_ART = """welcome to the game Hangman\n
                      |___/\n"""
 MAX_TRIES = 6
 
+HANGMAN_PHOTOS = {0 : """x-------x""", 1 : """    
+    x-------x
+    |
+    |
+    |
+    |
+    |""", 2 : """
+    x-------x
+    |       |
+    |       0
+    |
+    |
+    |""", 3 : """
+    x-------x
+    |       |
+    |       0
+    |       |
+    |
+    |""", 4 : """
+    x-------x
+    |       |
+    |       0
+    |      /|\ 
+    |
+    |""", 5 : """
+    x-------x
+    |       |
+    |       0
+    |      /|\ 
+    |      /
+    |""", 6 : """
+    x-------x
+    |       |
+    |       0
+    |      /|\ 
+    |      / \ 
+    |"""}
+
 print (HANGMAN_ASCII_ART, MAX_TRIES)
 
-print("""x-------x""")
-					 
-print("""    
-    x-------x
-    |
-    |
-    |
-    |
-    |""")
-					 
-print("""
-    x-------x
-    |       |
-    |       0
-    |
-    |
-    |""")
-					 
-print("""
-    x-------x
-    |       |
-    |       0
-    |       |
-    |
-    |""")
-					 
-print("""
-    x-------x
-    |       |
-    |       0
-    |      /|\
-    |
-    |""")
-					 
-print("""
-    x-------x
-    |       |
-    |       0
-    |      /|\
-    |      /
-    |""")
-	
-print("""
-    x-------x
-    |       |
-    |       0
-    |      /|\
-    |      / \
-    |""")
-
+def print_hangman(num_of_tries):
+    print(HANGMAN_PHOTOS[num_of_tries])
 
 def check_valid_input(letter_guessed, old_letters_guessed):
     is_valid = False
@@ -106,7 +96,8 @@ def check_win(secret_word, old_letters_guessed):
 
 
 def main():
-
+    num_of_tries = 4
+    print_hangman(num_of_tries)
 
 
 if __name__ == '__main__':
