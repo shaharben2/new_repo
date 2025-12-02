@@ -95,10 +95,21 @@ def check_win(secret_word, old_letters_guessed):
     return has_won
 
 
+def choose_word(file_path, index):
+    file = open(file_path, "r")
+    file_read = file.read()
+    file.close()
+    names_list = file_read.split(" ")
+    num_unique_words = len(list(set(names_list)))
+    real_idx = (index - 1) % len(names_list)
+    return (num_unique_words, names_list[real_idx])
+
 def main():
-    num_of_tries = 4
-    print_hangman(num_of_tries)
+
 
 
 if __name__ == '__main__':
     main()
+
+
+    
