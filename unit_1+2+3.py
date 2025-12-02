@@ -9,45 +9,51 @@ HANGMAN_ASCII_ART = """welcome to the game Hangman\n
                      |___/\n"""
 MAX_TRIES = 6
 
-HANGMAN_PHOTOS = {0 : """x-------x""", 1 : """    
+HANGMAN_PHOTOS = {0 : """x-------x
+                  """, 1 : """    
     x-------x
     |
     |
     |
     |
-    |""", 2 : """
-    x-------x
-    |       |
-    |       0
     |
-    |
-    |""", 3 : """
+    """, 2 : """
     x-------x
     |       |
     |       0
+    |
+    |
+    |
+    """, 3 : """
+    x-------x
+    |       |
+    |       0
     |       |
     |
-    |""", 4 : """
+    |
+    """, 4 : """
     x-------x
     |       |
     |       0
     |      /|\ 
     |
-    |""", 5 : """
+    |
+    """, 5 : """
     x-------x
     |       |
     |       0
     |      /|\ 
     |      /
-    |""", 6 : """
+    |
+    """, 6 : """
     x-------x
     |       |
     |       0
     |      /|\ 
     |      / \ 
-    |"""}
+    |
+    """}
 
-print (HANGMAN_ASCII_ART, MAX_TRIES)
 
 def print_hangman(num_of_tries):
     print(HANGMAN_PHOTOS[num_of_tries])
@@ -62,17 +68,15 @@ def check_valid_input(letter_guessed, old_letters_guessed):
 def try_update_letter_guessed(letter_guessed, old_letters_guessed):
     is_valid = check_valid_input(letter_guessed, old_letters_guessed)
     if is_valid:
-        old_letters_guessed.append(letter_guessed)
+        old_letters_guessed.append(letter_guessed.lower())
     else:
         print("X")
-        print(sorted(old_letters_guessed))
+        if len(old_letters_guessed) != 0:
+            sorted_list = sorted(old_letters_guessed)
+            str_list = " -> ".join(sorted_list)
+            print(str_list)
 
-    print(is_valid)
-
-
-word = input("Please enter a word: ")
-game = "_" * len(word)
-print(" ".join(game))
+    return is_valid
 
 
 def show_hidden_word(secret_word, old_letters_guessed):
@@ -105,6 +109,31 @@ def choose_word(file_path, index):
     return (num_unique_words, names_list[real_idx])
 
 def main():
+    print (HANGMAN_ASCII_ART, MAX_TRIES)
+    path = input("enter file path: ")
+    index = int(input("Enter index: "))
+    _, secret_word = choose_word(path, index)
+    print("Let's start!")
+    wrong_guesses = 0
+    print_hangman(wrong_guesses)
+    old_letters_guessed = []
+    print(show_hidden_word(secret_word, old_letters_guessed))
+    while not check_win(secret_word, old_letters_guessed) and wrong_guesses != 6:
+        letter_guessed = input("Guess a letter: ")
+        is_valid = try_update_letter_guessed(letter_guessed, old_letters_guessed)
+        if is_valid:
+            if letter_guessed.lower() in secret_word:
+                print(show_hidden_word(secret_word, old_letters_guessed))
+            else:
+                wrong_guesses += 1
+                print(":(")
+                print_hangman(wrong_guesses)
+                print(show_hidden_word(secret_word, old_letters_guessed))
+
+    if wrong_guesses == 6:
+        print("LOSE")
+    else: 
+        print("WIN")
 
 
 
