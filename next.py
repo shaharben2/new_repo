@@ -1,98 +1,126 @@
 import functools
+import string
 
-class Animal:
-    zoo_name = "Hayaton"
+def check_input(username, password):
+    is_username_ok = True
+    is_password_ok = True
+    must_letters = {"Upper" : 0, "Lower": 0, "Digit" : 0, "Punc" : 0}
+    for char in username:
+        if not (char.isalpha() or char.isdigit() or char == "_"):
+            is_username_ok = False
+            raise UsernameContainsIllegalCharacter(char, username.find(char))
+            
 
-    def __init__(self, name, hunger = 0):
-        self._name = name
-        self._hunger = hunger
+    if len(username) < 3:
+        is_username_ok = False
+        raise UsernameTooShort()
 
-    def get_name(self):
-        return self._name
+    if len(username) > 16:
+        is_username_ok = False
+        raise UsernameTooLong()
     
-    def is_hungry(self):
-        return self._hunger > 0
+    if len(password) < 8:
+        is_password_ok = False
+        raise PasswordTooShort()
     
-    def feed(self):
-        self._hunger -= 1
+    if len(password) > 40:
+        is_password_ok = False
+        raise PasswordTooLong()
+    
+    for char in password:
+        if char.isupper():
+            must_letters["Upper"] += 1
+        elif char.islower():
+            must_letters["Lower"] += 1
+        elif char.isdigit():
+            must_letters["Digit"] += 1
+        elif char in string.punctuation:
+            must_letters["Punc"] += 1
+    
+    for key in must_letters:
+        if must_letters[key] == 0:
+            is_password_ok = False
+            if key == "Upper":
+                raise UpperCase()
+            elif key == "Lower":
+                raise LowerCase()
+            elif key == "Digit":
+                raise Digit()
+            elif key == "Punc":
+                raise Special()
 
-    def talk(self):
-        print("random animal")
-        
-class Dog(Animal):
-    def talk(self):
-        print("woof woof")
+    if is_username_ok and is_password_ok:
+        print("OK")
 
-    def fetch_stick(self):
-        print("There you go, sir!")
+    return "OK"
 
-class Cat(Animal):
-    def talk(self):
-        print("meow")
+    
 
-    def chase_laser(self):
-        print("Meeeeow")
+class UsernameContainsIllegalCharacter(Exception):
+    def __init__(self, char, idx):
+        self._char = char
+        self._idx = idx
 
-class Skunk(Animal):
-    def __init__(self, name, hunger=0, stink_count = 6):
-        super().__init__(name, hunger)
-        self._stink_count = stink_count
+    def __str__(self):
+        print('The username contains an illegal character \"%s\" at index %d' % (self._char, self._idx))
 
-    def talk(self):
-        print("tsssss")
+class UsernameTooShort(Exception):
+    def __str__(self):
+        print("The username is too short")
 
-    def stink(self):
-        print("Dear lord!")
+class UsernameTooLong(Exception):
+    def __str__(self):
+        print("The username is too long")
 
-class Unicorn(Animal):
-    def talk(self):
-        print("Good day, darling")
+class PasswordMissingCharacter(Exception):
+    def __str__(self):
+        print("The password is missing a character")
 
-    def sing(self):
-        print("I’m not your toy...")
+class PasswordTooShort(Exception):
+    def __str__(self):
+        print("The password is too short")
 
-class Dragon(Animal):
-    def __init__(self, name, hunger=0, color = "Green"):
-        super().__init__(name, hunger)
-        self._color = color
+class PasswordTooLong(Exception):
+    def __str__(self):
+        print("The password is too long")
 
-    def talk(self):
-        print("Raaaawr")
+class UpperCase(PasswordMissingCharacter):
+    def __str__(self):
+        print("The password is missing a character (Uppercase)")
 
-    def breath_fire(self):
-        print("$@#$#@$")
+class LowerCase(PasswordMissingCharacter):
+    def __str__(self):
+        print("The password is missing a character (Lowercase)")
+
+class Digit(PasswordMissingCharacter):
+    def __str__(self):
+        print("The password is missing a character (Digit)")
+
+class Special(PasswordMissingCharacter):
+    def __str__(self):
+        print("The password is missing a character (Special)")
+
 
 def main():
-    dog = Dog("Brownie", 10)
-    cat = Cat("Zelda", 3)
-    skunk = Skunk("Stinky", 0)
-    unicorn = Unicorn("keith", 7)
-    dragon = Dragon("Lizzy", 80)
-    dog2 = Dog("Doggo", 80)
-    cat2 = Cat("Kitty", 80)
-    skunk2 = Skunk("Stinky Jr.", 80)
-    unicorn2 = Unicorn("Clair", 80)
-    dragon2 = Dragon("McFly", 80)
-    zoo_lst = [dog, cat, skunk, unicorn, dragon, dog2, cat2, skunk2, unicorn2, dragon2]
-    for animal in zoo_lst:
-        if animal.is_hungry():
-            print(type(animal).__name__ + " " + animal.get_name())
-        while animal.is_hungry():
-            animal.feed()
-        
-        animal.talk()
-        if isinstance(animal, Dog):
-            animal.fetch_stick()
-        if isinstance(animal, Cat):
-            animal.chase_laser()
-        if isinstance(animal, Skunk):
-            animal.stink()
-        if isinstance(animal, Unicorn):
-            animal.sing()
-        if isinstance(animal, Dragon):
-            animal.breath_fire()
+    is_ok = ""
+    while is_ok != "OK":
+        username = input("enter username: ")
+        password = input("enter password: ")
+        try:
+            is_ok = check_input(username, password)
+        except Exception as e:
+            e.__str__() 
 
-    print(Animal.zoo_name)      
+    # check_input("0123456789ABCDEFG", "2")
+    # check_input("A_a1.", "12345678")
+    # check_input("A_1", "2")
+    # check_input("A_1", "ThisIsAQuiteLongPasswordAndHonestlyUnnecessary")
+    # check_input("A_1", "abcdefghijklmnop")
+    # check_input("A_1", "ABCDEFGHIJLKMNOP")
+    # check_input("A_1", "ABCDEFGhijklmnop")
+    # check_input("A_1", "4BCD3F6h1jk1mn0p")
+    # check_input("A_1", "4BCD3F6.1jk1mn0p")
+    
 
 if __name__ == '__main__':
     main()
